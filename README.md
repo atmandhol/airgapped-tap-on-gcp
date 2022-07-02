@@ -21,3 +21,6 @@ source 00_setup.sh
 ```bash
 ./99_cleanup.sh
 ```
+
+## Useful Links
+- [Completely Private GKE Clusters with No Internet Connectivity](https://medium.com/google-cloud/completely-private-gke-clusters-with-no-internet-connectivity-945fffae1ccd)
