@@ -29,13 +29,13 @@ gcloud compute networks subnets create $PUB_SUBNET \
 
 # Rule to allow SSHing into Jump box
 gcloud compute firewall-rules create allow-ssh-pub \
---network $PUB_NETWORK_NAME --allow tcp:22
+--network $PUB_NETWORK_NAME --allow tcp:22 --source-ranges 0.0.0.0/0 --direction INGRESS
 
 gcloud compute firewall-rules create allow-ssh-priv \
---network $PRIV_NETWORK_NAME --allow tcp:22
+--network $PRIV_NETWORK_NAME --allow tcp:22 --source-ranges 10.10.0.0/16 --direction INGRESS
 
 gcloud compute firewall-rules create allow-https-priv \
---network $PRIV_NETWORK_NAME --allow tcp:443
+--network $PRIV_NETWORK_NAME --allow tcp:443 --source-ranges 10.10.0.0/16 --direction INGRESS
 
 # Peering
 gcloud compute networks peerings create airgapped-peer \

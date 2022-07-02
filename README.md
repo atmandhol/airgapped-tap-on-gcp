@@ -27,8 +27,10 @@ gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'source 00_setup.sh && sh d
 ```
 
 ### Step 3: Block access to the internet
-```bash
+This script sets a `DENY` egress rule to `0.0.0.0/0` and remove the default route to internet that is created during creation of network.
 
+```bash
+./03_block_access_to_internet.sh
 ```
 
 ## Cleanup Infrastructure
