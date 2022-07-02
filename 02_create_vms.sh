@@ -5,14 +5,14 @@ gcloud compute instances create $JP_VM_NAME \
 --network-interface=network-tier=PREMIUM,subnet=$PUB_SUBNET \
 --maintenance-policy=MIGRATE \
 --provisioning-model=STANDARD \
---no-scopes \
 --create-disk=auto-delete=yes,boot=yes,device-name=$JP_VM_NAME,image=projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220701,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$JP_VM_ZONE/diskTypes/pd-balanced \
 --no-shielded-secure-boot \
 --no-shielded-vtpm \
 --no-shielded-integrity-monitoring \
 --reservation-affinity=any \
 --service-account=$(gcloud iam service-accounts list | grep compute@developer.gserviceaccount.com | cut -d " " -f11) \
---scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append
+--scopes=https://www.googleapis.com/auth/cloud-platform
+# TODO: Passing so much scope is a bad practice. Keeping this for now as it is not a tutorial on air-gapped best practices.
 
 gcloud compute instances create $IC_VM_NAME \
 --project=$GCP_PROJECT \

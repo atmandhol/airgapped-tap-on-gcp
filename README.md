@@ -26,6 +26,11 @@ gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'sh setup_jumpbox.sh'
 gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'source 00_setup.sh && sh download.sh'
 ```
 
+### Step 3: Block access to the internet
+```bash
+
+```
+
 ## Cleanup Infrastructure
 ```bash
 ./98_cleanup_vms.sh
