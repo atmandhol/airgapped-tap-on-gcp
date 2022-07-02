@@ -1,9 +1,6 @@
 # Air-gapped TAP on Google Cloud
 
-Instructions on setting up the following
-- A private network that allows no incoming or outgoing traffic from the internet
-- Air-gapped VM that is runing KinD kubernetes cluster on which we will install TAP
-- Air-gapped VM that is running Harbor Registry using Self signed CA certs
+![Architecture](airgapped.png)
 
 ## Setup Environment
 
@@ -11,13 +8,20 @@ Instructions on setting up the following
 source 00_setup.sh
 ```
 
-### Step 1: Create a Private Network
+### Step 1: Create Infrastructure (Networks, Subnets, VMs)
 
 ```bash
 ./01_create_network.sh
+./02_create_vms.sh
 ```
 
-## Cleanup
+### Step 2: Setup Jumpbox
+
+```bash
+gcloud compute ssh --zone "$JP_VM_ZONE" "$JP_VM_NAME" --project "$GCP_PROJECT"
+```
+
+## Cleanup Infrastructure
 ```bash
 ./99_cleanup.sh
 ```

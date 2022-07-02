@@ -29,3 +29,8 @@ export PUB_SUBNET_RANGE=10.10.13.0/24
 export IC_VM_NAME=airgapped-iterate-cluster
 export IC_VM_ZONE=us-central1-a
 export IC_VM_TYPE=e2-standard-16
+
+## Jump VM setup
+export JP_VM_NAME=airgapped-jump
+export JP_VM_ZONE=us-central1-a
+export JP_VM_TYPE=e2-standard-2
