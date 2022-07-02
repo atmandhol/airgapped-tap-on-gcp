@@ -21,8 +21,9 @@ source 00_setup.sh
 # gcloud compute ssh --zone "$JP_VM_ZONE" "$JP_VM_NAME" --project "$GCP_PROJECT"
 
 gcloud compute scp scripts/* $JP_VM_NAME:~/ --zone=$JP_VM_ZONE
+gcloud compute scp 00_setup.sh  $JP_VM_NAME:~/ --zone=$JP_VM_ZONE
 gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'sh setup_jumpbox.sh'
-gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'sh download.sh'
+gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'source 00_setup.sh && sh download.sh'
 ```
 
 ## Cleanup Infrastructure

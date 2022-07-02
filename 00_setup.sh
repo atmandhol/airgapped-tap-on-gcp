@@ -34,3 +34,9 @@ export IC_VM_TYPE=e2-standard-16
 export JP_VM_NAME=airgapped-jump
 export JP_VM_ZONE=us-central1-a
 export JP_VM_TYPE=e2-standard-2
+
+## Registry VM setup
+export R_VM_NAME=airgapped-registry
+export R_VM_ZONE=us-central1-a
+export R_VM_TYPE=e2-standard-4
+export HARBOR_VERSION=v2.5.1
