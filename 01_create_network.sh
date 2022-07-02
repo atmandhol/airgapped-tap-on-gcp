@@ -17,3 +17,9 @@ gcloud compute firewall-rules create deny-egress \
 --direction EGRESS \
 --priority 1100 \
 --network $PRIV_NETWORK_NAME
+
+gcloud compute firewall-rules create allow-ssh \
+--network $PRIV_NETWORK_NAME --allow tcp:22
+
+# Delete the default route
+gcloud compute routes delete $(gcloud compute routes list | grep $PRIV_NETWORK_NAME | grep default-internet-gateway | cut -d " " -f1) -q
