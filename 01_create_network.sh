@@ -34,6 +34,9 @@ gcloud compute firewall-rules create allow-ssh-pub \
 gcloud compute firewall-rules create allow-ssh-priv \
 --network $PRIV_NETWORK_NAME --allow tcp:22
 
+gcloud compute firewall-rules create allow-https-priv \
+--network $PRIV_NETWORK_NAME --allow tcp:443
+
 # Peering
 gcloud compute networks peerings create airgapped-peer \
 --network=$PUB_NETWORK_NAME --peer-project $GCP_PROJECT --peer-network $PRIV_NETWORK_NAME

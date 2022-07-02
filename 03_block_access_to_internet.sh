@@ -9,3 +9,7 @@ gcloud compute firewall-rules create deny-egress \
 
 # Delete the default route to the internet
 gcloud compute routes delete $(gcloud compute routes list | grep $PRIV_NETWORK_NAME | grep default-internet-gateway | cut -d " " -f1) -q
+
+# Remove Public IPs of the VMs
+gcloud compute instances delete-access-config $IC_VM_NAME --zone $IC_VM_ZONE
+gcloud compute instances delete-access-config $R_VM_NAME --zone $R_VM_ZONE

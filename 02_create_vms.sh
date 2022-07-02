@@ -29,8 +29,6 @@ gcloud compute instances create $IC_VM_NAME \
 --no-shielded-integrity-monitoring \
 --reservation-affinity=any
 
-gcloud compute instances delete-access-config $IC_VM_NAME --zone $IC_VM_ZONE
-
 gcloud compute instances create $R_VM_NAME \
 --project=$GCP_PROJECT \
 --zone=$R_VM_ZONE \
@@ -45,5 +43,3 @@ gcloud compute instances create $R_VM_NAME \
 --no-shielded-vtpm \
 --no-shielded-integrity-monitoring \
 --reservation-affinity=any
-
-gcloud compute instances delete-access-config $R_VM_NAME --zone $R_VM_ZONE
