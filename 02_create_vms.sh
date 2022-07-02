@@ -22,7 +22,7 @@ gcloud compute instances create $JP_VM_NAME \
 --provisioning-model=STANDARD \
 --no-service-account \
 --no-scopes \
---create-disk=auto-delete=yes,boot=yes,device-name=$JP_VM_NAME,image=projects/cos-cloud/global/images/cos-97-16919-103-1,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$JP_VM_ZONE/diskTypes/pd-balanced \
+--create-disk=auto-delete=yes,boot=yes,device-name=$JP_VM_NAME,image=projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220701,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$JP_VM_ZONE/diskTypes/pd-balanced \
 --no-shielded-secure-boot \
 --no-shielded-vtpm \
 --no-shielded-integrity-monitoring \

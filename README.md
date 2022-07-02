@@ -18,12 +18,17 @@ source 00_setup.sh
 ### Step 2: Setup Jumpbox
 
 ```bash
-gcloud compute ssh --zone "$JP_VM_ZONE" "$JP_VM_NAME" --project "$GCP_PROJECT"
+# gcloud compute ssh --zone "$JP_VM_ZONE" "$JP_VM_NAME" --project "$GCP_PROJECT"
+
+gcloud compute scp scripts/* $JP_VM_NAME:~/ --zone=$JP_VM_ZONE
+gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'sh setup_jumpbox.sh'
+gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'sh download.sh'
 ```
 
 ## Cleanup Infrastructure
 ```bash
-./99_cleanup.sh
+./98_cleanup_vms.sh
+./99_cleanup_network.sh
 ```
 
 ## Useful Links
