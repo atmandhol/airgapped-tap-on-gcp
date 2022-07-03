@@ -9,6 +9,9 @@ source 00_setup.sh
 ```
 
 ### Step 1: Create Infrastructure (Networks, Subnets, VMs)
+> Estimated Time: 2-3 mins
+
+This step creates a new private and public network that are used for this airgapped setup.
 
 ```bash
 ./01_create_network.sh
@@ -16,6 +19,7 @@ source 00_setup.sh
 ```
 
 ### Step 2: Setup Jumpbox and Bootstrap Air-gapped VMs
+> Estimated Time: 2-3 mins
 
 ```bash
 # gcloud compute ssh --zone "$JP_VM_ZONE" "$JP_VM_NAME" --project "$GCP_PROJECT"
@@ -27,6 +31,8 @@ gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'source 00_setup.sh && sh b
 ```
 
 ### Step 3: Block access to the internet
+> Estimated Time: 2-3 mins
+
 This script sets a `DENY` egress rule to `0.0.0.0/0` and remove the default route to internet that is created during creation of network.
 
 ```bash
@@ -34,14 +40,17 @@ This script sets a `DENY` egress rule to `0.0.0.0/0` and remove the default rout
 ```
 
 ### Step 4: Start Air-gapped TAP installation
-- Download [Tanzu CLI Linux Bundle](https://network.pivotal.io/products/tanzu-application-platform/#/releases/1124562/file_groups/8893) and [Cluster Essentials for Linux](https://network.pivotal.io/products/tanzu-cluster-essentials/#/releases/1077299) from Tanzu Network. The following files should be on your Downloads folder:
+> Estimated Time: 2-3 mins
+
+- Download [Tanzu CLI Linux Bundle](https://network.pivotal.io/products/tanzu-application-platform/#/releases/1124562/file_groups/8893) and [Cluster Essentials for Linux](https://network.pivotal.io/products/tanzu-cluster-essentials/#/releases/1077299) from Tanzu Network. The following files should be on your Downloads folder (if the file names are different, no worries, just update the values in the 00_setup.sh file and run `source 00_setup.sh` before running further commands):
 
     - tanzu-framework-linux-amd64.tar
     - tanzu-cluster-essentials-linux-amd64-1.1.0.tgz
 
 - Copy those files to Jump Box
 ```bash
-gcloud compute scp ~/Downloads/tanzu-framework-linux-amd64.tar tanzu-cluster-essentials-linux-amd64-1.1.0.tgz $JP_VM_NAME:~/ --zone=$JP_VM_ZONE
+gcloud compute scp ~/Downloads/$TANZU_CLI_TAR ~/Downloads/$CLUSTER_ESSENTIALS_TAR $JP_VM_NAME:~/ --zone=$JP_VM_ZONE
+gcloud compute ssh $JP_VM_NAME --zone=$JP_VM_ZONE -- 'source 00_setup.sh && sh tap_bootstrap.sh'
 ```
 
 ## Cleanup Infrastructure

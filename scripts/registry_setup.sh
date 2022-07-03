@@ -78,7 +78,7 @@ https:
   private_key: /home/$USER/$HOST_NAME.key
 
 # Change this password to something other than this
-harbor_admin_password: Harbor12345
+harbor_admin_password: $HARBOR_ADMIN_PASSWORD
 
 database:
   password: root123
