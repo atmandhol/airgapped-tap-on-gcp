@@ -5,7 +5,7 @@ gcloud compute instances create $JP_VM_NAME \
 --network-interface=network-tier=PREMIUM,subnet=$PUB_SUBNET \
 --maintenance-policy=MIGRATE \
 --provisioning-model=STANDARD \
---create-disk=auto-delete=yes,boot=yes,device-name=$JP_VM_NAME,image=projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220701,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$JP_VM_ZONE/diskTypes/pd-balanced \
+--create-disk=auto-delete=yes,boot=yes,device-name=$JP_VM_NAME,image=$VM_BASE_IMAGE,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$JP_VM_ZONE/diskTypes/pd-balanced \
 --no-shielded-secure-boot \
 --no-shielded-vtpm \
 --no-shielded-integrity-monitoring \
@@ -23,7 +23,7 @@ gcloud compute instances create $IC_VM_NAME \
 --provisioning-model=STANDARD \
 --no-service-account \
 --no-scopes \
---create-disk=auto-delete=yes,boot=yes,device-name=$IC_VM_NAME,image=projects/cos-cloud/global/images/cos-97-16919-103-1,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$IC_VM_ZONE/diskTypes/pd-balanced \
+--create-disk=auto-delete=yes,boot=yes,device-name=$IC_VM_NAME,image=$VM_BASE_IMAGE,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$IC_VM_ZONE/diskTypes/pd-balanced \
 --no-shielded-secure-boot \
 --no-shielded-vtpm \
 --no-shielded-integrity-monitoring \
@@ -38,7 +38,7 @@ gcloud compute instances create $R_VM_NAME \
 --provisioning-model=STANDARD \
 --no-service-account \
 --no-scopes \
---create-disk=auto-delete=yes,boot=yes,device-name=$R_VM_NAME,image=projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220701,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$R_VM_ZONE/diskTypes/pd-balanced \
+--create-disk=auto-delete=yes,boot=yes,device-name=$R_VM_NAME,image=$VM_BASE_IMAGE,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$R_VM_ZONE/diskTypes/pd-balanced \
 --no-shielded-secure-boot \
 --no-shielded-vtpm \
 --no-shielded-integrity-monitoring \
