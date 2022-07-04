@@ -10,6 +10,7 @@ export CLUSTER_ESSENTIALS_BUNDLE_VERSION=1.1.0
 export TANZU_CLI_TAR=tanzu-framework-linux-amd64.tar
 export TANZU_CLI_VERSION=v0.11.6
 export HARBOR_ADMIN_PASSWORD=Harbor12345
+export TAP_PACKAGE_BUNDLE_VERSION=1.2.0-build.17
 
 # ================================================
 # You can leave all envs vars below this untouched
@@ -49,6 +50,5 @@ export R_VM_ZONE=us-central1-a
 export R_VM_TYPE=e2-standard-4
 export HARBOR_VERSION=v2.5.1
 
-## TAP Settings
-export TAP_K8S_NODE=kindest/node:v1.23.6
+## Kubernetes Settings
 export TAP_K8S_VERSION=1.23.6
