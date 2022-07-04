@@ -21,7 +21,7 @@ imgpkg copy \
 IMGPKG_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
 IMGPKG_REGISTRY_USERNAME=admin \
 IMGPKG_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
-./imgpkg copy \
+imgpkg copy \
     --tar cluster-essentials-bundle.tar \
     --to-repo $HARBOR_HOST_NAME/library/cluster-essentials-bundle \
     --include-non-distributable-layers \

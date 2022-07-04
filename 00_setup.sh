@@ -6,6 +6,7 @@ export TANZUNET_USERNAME=adhol@vmware.com
 export TANZUNET_PASSWORD=
 export CLUSTER_ESSENTIALS_TAR=tanzu-cluster-essentials-linux-amd64-1.1.0.tgz
 export CLUSTER_ESSENTIALS_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle:1.1.0
+export CLUSTER_ESSENTIALS_BUNDLE_VERSION=1.1.0
 export TANZU_CLI_TAR=tanzu-framework-linux-amd64.tar
 export TANZU_CLI_VERSION=v0.11.6
 export HARBOR_ADMIN_PASSWORD=Harbor12345
@@ -50,3 +51,4 @@ export HARBOR_VERSION=v2.5.1
 
 ## TAP Settings
 export TAP_K8S_NODE=kindest/node:v1.23.6
+export TAP_K8S_VERSION=1.23.6
