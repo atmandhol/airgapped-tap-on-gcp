@@ -2,7 +2,20 @@
 
 ![Architecture](airgapped.png)
 
+## Pre Reqs
+- A GCP Account.
+- `gcloud` CLI installed and pointing to the GCP account.
+- Clone this repo and `cd` into it.
+
+NOTE: the scripts in this repo makes heavy use of `gcloud` cli.
+
 ## Setup Environment
+
+Update the `00_setup.sh` file with your environment details. These following 4 settings must be changed (you can change others too if you like but those can stay as-is):
+- GCP_PROJECT
+- GCP_STAGING_BUCKET
+- TANZUNET_USERNAME
+- TANZUNET_PASSWORD
 
 ```bash
 source 00_setup.sh
