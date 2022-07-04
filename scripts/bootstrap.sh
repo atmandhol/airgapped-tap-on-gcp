@@ -13,6 +13,7 @@ gcloud compute ssh --zone "$IC_VM_ZONE" "$IC_VM_NAME" --project "$GCP_PROJECT" -
 
 # Download Registry CA Certs from Registry VM
 export HARBOR_HOST_NAME=$(gcloud compute instances list --filter="$R_VM_NAME" --format "get(networkInterfaces[0].networkIP)").nip.io
+# Add HARBOR_HOST_NAME to the 00_setup file so it gets carried to other scripts running in airgapped environments
 echo "" >> 00_setup.sh
 echo "export HARBOR_HOST_NAME=$HARBOR_HOST_NAME" >> 00_setup.sh
 gcloud compute scp $R_VM_NAME:~/$HARBOR_HOST_NAME.crt $R_VM_NAME:~/ca.crt . --zone=$R_VM_ZONE --internal-ip

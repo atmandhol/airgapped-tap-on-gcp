@@ -10,52 +10,85 @@ sudo bash install.sh
 # Download all the required stuff so that we can transfer to the airgapped VM
 
 ## Download Cluster Essentials
-IMGPKG_REGISTRY_HOSTNAME=registry.tanzu.vmware.com \
-IMGPKG_REGISTRY_USERNAME=$TANZUNET_USERNAME \
-IMGPKG_REGISTRY_PASSWORD=$TANZUNET_PASSWORD \
-imgpkg copy \
-    -b $CLUSTER_ESSENTIALS_BUNDLE \
-    --to-tar cluster-essentials-bundle.tar \
-    --include-non-distributable-layers
+gsutil cp gs://$GCP_STAGING_BUCKET/cluster-essentials-$CLUSTER_ESSENTIALS_BUNDLE_VERSION.tar .
+
+if [ $? -eq 1 ]
+then
+    # Download from Tanzu Network
+    IMGPKG_REGISTRY_HOSTNAME=registry.tanzu.vmware.com \
+    IMGPKG_REGISTRY_USERNAME=$TANZUNET_USERNAME \
+    IMGPKG_REGISTRY_PASSWORD=$TANZUNET_PASSWORD \
+    imgpkg copy \
+        -b $CLUSTER_ESSENTIALS_BUNDLE \
+        --to-tar cluster-essentials-$CLUSTER_ESSENTIALS_BUNDLE_VERSION.tar \
+        --include-non-distributable-layers
+
+    # Stage it for further use
+    gsutil cp cluster-essentials-$CLUSTER_ESSENTIALS_BUNDLE_VERSION.tar gs://$GCP_STAGING_BUCKET/
+fi
 
 IMGPKG_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
 IMGPKG_REGISTRY_USERNAME=admin \
 IMGPKG_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
 imgpkg copy \
-    --tar cluster-essentials-bundle.tar \
-    --to-repo $HARBOR_HOST_NAME/library/cluster-essentials-bundle:$CLUSTER_ESSENTIALS_BUNDLE_VERSION \
+    --tar cluster-essentials-$CLUSTER_ESSENTIALS_BUNDLE_VERSION.tar \
+    --to-repo $HARBOR_HOST_NAME/library/cluster-essentials-bundle \
     --include-non-distributable-layers \
     --registry-ca-cert-path $HARBOR_HOST_NAME.crt
 
-# This is a ridiculously long package bundle that takes 30-45 mins. I have downloaded it once and then I transferred
-# it to my GCP bucket so next time I can just copy it from there. 
-# Uncomment this command and add your code to get the tap-packages.tar from your already staged location for faster install
-# ============================ For First time downloaders ================================
 
-# IMGPKG_REGISTRY_HOSTNAME=registry.tanzu.vmware.com \
-# IMGPKG_REGISTRY_USERNAME=$TANZUNET_USERNAME \
-# IMGPKG_REGISTRY_PASSWORD=$TANZUNET_PASSWORD \
-# imgpkg copy \
-#     -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:$TAP_PACKAGE_BUNDLE_VERSION \
-#     --to-tar tap-packages.tar \
-#     --include-non-distributable-layers
+## Download TAP Packages
+gsutil cp gs://$GCP_STAGING_BUCKET/tap-packages-$TAP_PACKAGE_BUNDLE_VERSION.tar .
 
-# gsutil cp tap-packages.tar gs://{some-private-bucket-in-your-account}/
+if [ $? -eq 1 ]
+then
+    # Download from Tanzu Network
+    IMGPKG_REGISTRY_HOSTNAME=registry.tanzu.vmware.com \
+    IMGPKG_REGISTRY_USERNAME=$TANZUNET_USERNAME \
+    IMGPKG_REGISTRY_PASSWORD=$TANZUNET_PASSWORD \
+    imgpkg copy \
+    -b $TAP_PACKAGE_BUNDLE \
+    --to-tar tap-packages-$TAP_PACKAGE_BUNDLE_VERSION.tar \
+    --include-non-distributable-layers
 
-# ============ For people who have already stored the bundle in their storage ============
-
-# gsutil cp gs://{some-private-bucket-in-your-account}/tap-packages.tar .
-
-gsutil cp gs://adhol-tap-bundles/tap-packages.tar .
-
-# ========================================================================================
+    # Stage it for further use
+    gsutil cp tap-packages-$TAP_PACKAGE_BUNDLE_VERSION.tar gs://$GCP_STAGING_BUCKET/
+fi
 
 IMGPKG_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
 IMGPKG_REGISTRY_USERNAME=admin \
 IMGPKG_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
 imgpkg copy \
-    --tar tap-packages.tar \
+    --tar tap-packages-$TAP_PACKAGE_BUNDLE_VERSION.tar \
     --to-repo $HARBOR_HOST_NAME/library/tap-packages \
+    --include-non-distributable-layers \
+    --registry-ca-cert-path $HARBOR_HOST_NAME.crt
+
+
+## Download TBS Full Deps Packages
+gsutil cp gs://$GCP_STAGING_BUCKET/tbs-full-deps-$TBS_DEPS_PACKAGE_BUNDLE_VERSION.tar .
+
+if [ $? -eq 1 ]
+then
+    # Download from Tanzu Network
+    IMGPKG_REGISTRY_HOSTNAME=registry.tanzu.vmware.com \
+    IMGPKG_REGISTRY_USERNAME=$TANZUNET_USERNAME \
+    IMGPKG_REGISTRY_PASSWORD=$TANZUNET_PASSWORD \
+    imgpkg copy \
+    -b $TBS_DEPS_PACKAGE_BUNDLE \
+    --to-tar tbs-full-deps-$TBS_DEPS_PACKAGE_BUNDLE_VERSION.tar \
+    --include-non-distributable-layers
+
+    # Stage it for further use
+    gsutil cp tbs-full-deps-$TBS_DEPS_PACKAGE_BUNDLE_VERSION.tar gs://$GCP_STAGING_BUCKET/
+fi
+
+IMGPKG_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
+IMGPKG_REGISTRY_USERNAME=admin \
+IMGPKG_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
+imgpkg copy \
+    --tar tbs-full-deps-$TBS_DEPS_PACKAGE_BUNDLE_VERSION.tar \
+    --to-repo $HARBOR_HOST_NAME/library/tbs-full-deps \
     --include-non-distributable-layers \
     --registry-ca-cert-path $HARBOR_HOST_NAME.crt
 

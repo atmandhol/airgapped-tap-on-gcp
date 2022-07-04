@@ -2,15 +2,29 @@
 # This env vars needs to be updated to match your setup
 # =====================================================
 export GCP_PROJECT=adhol-playground
+# This variable points to a private bucket that will be used to store downloaded artifacts
+# from Tanzu Network so we don't keep going there for pulling bundles and images if it already exists in our GCP bucket.
+# The transfer from the bucket is miles faster than getting it from Tanzu Network
+# The script will check if the artifacts are available and will download if not
+export GCP_STAGING_BUCKET=adhol-tap-bundles
 export TANZUNET_USERNAME=adhol@vmware.com
 export TANZUNET_PASSWORD=
+
+# Manual downloads from Tanzu Network (For now)
 export CLUSTER_ESSENTIALS_TAR=tanzu-cluster-essentials-linux-amd64-1.1.0.tgz
-export CLUSTER_ESSENTIALS_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle:1.1.0
-export CLUSTER_ESSENTIALS_BUNDLE_VERSION=1.1.0
 export TANZU_CLI_TAR=tanzu-framework-linux-amd64.tar
 export TANZU_CLI_VERSION=v0.11.6
+
+# Registry Configuration
 export HARBOR_ADMIN_PASSWORD=Harbor12345
+
+# TAP Configuration
+export CLUSTER_ESSENTIALS_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle:1.1.0
+export CLUSTER_ESSENTIALS_BUNDLE_VERSION=1.1.0
+export TAP_PACKAGE_BUNDLE=registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.2.0-build.17
 export TAP_PACKAGE_BUNDLE_VERSION=1.2.0-build.17
+export TBS_DEPS_PACKAGE_BUNDLE=registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:1.6.0
+export TBS_DEPS_PACKAGE_BUNDLE_VERSION=1.6.0
 
 # ================================================
 # You can leave all envs vars below this untouched
@@ -42,7 +56,7 @@ export IC_VM_TYPE=e2-standard-16
 ## Jump VM setup
 export JP_VM_NAME=airgapped-jump
 export JP_VM_ZONE=us-central1-a
-export JP_VM_TYPE=e2-standard-2
+export JP_VM_TYPE=e2-standard-8
 
 ## Registry VM setup
 export R_VM_NAME=airgapped-registry
