@@ -94,7 +94,7 @@ ootb_supply_chain_basic:
   gitops:
     ssh_secret: ''
   registry:
-    repository: /library/supplychain
+    repository: library/supplychain
     server: $HARBOR_HOST_NAME
     ca_cert_data: |
 $(awk '{print "      " $0}' registry_server_ca.crt)
@@ -109,10 +109,64 @@ $(awk '{print "    " $0}' registry_server_ca.crt)
 
 EOF
 
-minikube start --embed-certs
+# minikube start --embed-certs
 
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_PACKAGE_BUNDLE_VERSION --values-file tap-values.yaml -n tap-install --wait=false
 tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v $TBS_DEPS_PACKAGE_BUNDLE_VERSION -n tap-install --wait=false
+
+# Setup Dev Namespace
+echo "$HARBOR_ADMIN_PASSWORD" | docker login $HARBOR_HOST_NAME -u admin --password-stdin
+
+tanzu secret registry add registry-credentials --server $HARBOR_HOST_NAME --username admin --password $HARBOR_ADMIN_PASSWORD --namespace default
+
+kubectl create secret generic custom-ca --from-file=caFile=registry_server_ca.crt -n default
+
+cat <<EOF | kubectl -n default apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tap-registry
+  annotations:
+    secretgen.carvel.dev/image-pull-secret: ""
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: e30K
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+secrets:
+  - name: registry-credentials
+imagePullSecrets:
+  - name: registry-credentials
+  - name: tap-registry
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: default-permit-deliverable
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: deliverable
+subjects:
+  - kind: ServiceAccount
+    name: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: default-permit-workload
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: workload
+subjects:
+  - kind: ServiceAccount
+    name: default
+EOF
+
 
 # Kick the full deps app: kctrl app kick --app full-tbs-deps -n tap-install -y
 # Kick the TBS app: kctrl app kick --app buildservice -n tap-install -y

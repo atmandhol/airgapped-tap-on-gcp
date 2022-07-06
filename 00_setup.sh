@@ -21,8 +21,8 @@ export HARBOR_ADMIN_PASSWORD=Harbor12345
 # TAP Configuration
 export CLUSTER_ESSENTIALS_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle:1.1.0
 export CLUSTER_ESSENTIALS_BUNDLE_VERSION=1.1.0
-export TAP_PACKAGE_BUNDLE=registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.2.0-build.17
-export TAP_PACKAGE_BUNDLE_VERSION=1.2.0-build.17
+export TAP_PACKAGE_BUNDLE=registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.2.0-build.18
+export TAP_PACKAGE_BUNDLE_VERSION=1.2.0-build.18
 export TBS_DEPS_PACKAGE_BUNDLE=registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:1.6.0
 export TBS_DEPS_PACKAGE_BUNDLE_VERSION=1.6.0
 
