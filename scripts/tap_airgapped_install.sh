@@ -110,8 +110,9 @@ $(awk '{print "    " $0}' registry_server_ca.crt)
 EOF
 
 # minikube start --embed-certs
-
+sleep 10
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_PACKAGE_BUNDLE_VERSION --values-file tap-values.yaml -n tap-install --wait=false
+sleep 10
 tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v $TBS_DEPS_PACKAGE_BUNDLE_VERSION -n tap-install --wait=false
 
 # Setup Dev Namespace
