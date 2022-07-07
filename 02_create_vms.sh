@@ -43,3 +43,18 @@ gcloud compute instances create $R_VM_NAME \
 --no-shielded-vtpm \
 --no-shielded-integrity-monitoring \
 --reservation-affinity=any
+
+gcloud compute instances create $GH_VM_NAME \
+--project=$GCP_PROJECT \
+--zone=$GH_VM_ZONE \
+--machine-type=$GH_VM_TYPE \
+--network-interface=network-tier=PREMIUM,subnet=$SRV_SUBNET \
+--maintenance-policy=MIGRATE \
+--provisioning-model=STANDARD \
+--no-service-account \
+--no-scopes \
+--create-disk=auto-delete=yes,boot=yes,device-name=$GH_VM_NAME,image=$VM_BASE_IMAGE,mode=rw,size=100,type=projects/$GCP_PROJECT/zones/$GH_VM_ZONE/diskTypes/pd-balanced \
+--no-shielded-secure-boot \
+--no-shielded-vtpm \
+--no-shielded-integrity-monitoring \
+--reservation-affinity=any

@@ -11,6 +11,10 @@ gcloud compute scp docker_setup.sh iterate_cluster_setup.sh 00_setup.sh $IC_VM_N
 gcloud compute ssh --zone "$IC_VM_ZONE" "$IC_VM_NAME" --project "$GCP_PROJECT" --internal-ip -- 'sh docker_setup.sh'
 gcloud compute ssh --zone "$IC_VM_ZONE" "$IC_VM_NAME" --project "$GCP_PROJECT" --internal-ip -- 'source 00_setup.sh && sh iterate_cluster_setup.sh'
 
+# Bootstrap Git VM
+gcloud compute scp gitea_setup.sh 00_setup.sh $GH_VM_NAME:~/ --zone=$GH_VM_ZONE --internal-ip
+gcloud compute ssh --zone "$GH_VM_ZONE" "$GH_VM_NAME" --project "$GCP_PROJECT" --internal-ip -- 'source 00_setup.sh && sh gitea_setup.sh'
+
 # Download Registry CA Certs from Registry VM
 export HARBOR_HOST_NAME=$(gcloud compute instances list --filter="$R_VM_NAME" --format "get(networkInterfaces[0].networkIP)").nip.io
 # Add HARBOR_HOST_NAME to the 00_setup file so it gets carried to other scripts running in airgapped environments
@@ -20,9 +24,19 @@ gcloud compute scp $R_VM_NAME:~/$HARBOR_HOST_NAME.crt $R_VM_NAME:~/ca.crt . --zo
 mv ca.crt registry_ca.crt
 cp $HARBOR_HOST_NAME.crt registry_server_ca.crt
 
+# Download Registry CA Certs from Registry VM
+export GIT_HOST_NAME=$(gcloud compute instances list --filter="$GH_VM_NAME" --format "get(networkInterfaces[0].networkIP)").nip.io
+# Add GIT_HOST_NAME to the 00_setup file so it gets carried to other scripts running in airgapped environments
+echo "" >> 00_setup.sh
+echo "export GIT_HOST_NAME=$GIT_HOST_NAME" >> 00_setup.sh
+gcloud compute scp $GH_VM_NAME:~/$GIT_HOST_NAME.crt $GH_VM_NAME:~/ca.crt . --zone=$GH_VM_ZONE --internal-ip
+mv ca.crt git_ca.crt
+cp $GIT_HOST_NAME.crt git_server_ca.crt
+
 # Copy Registry CA certs to Iterate Cluster VM
 cat <<EOF > install_certs.sh
 sudo cp $HARBOR_HOST_NAME.crt /usr/local/share/ca-certificates/$HARBOR_HOST_NAME.crt
+sudo cp $GIT_HOST_NAME.crt /usr/local/share/ca-certificates/$GIT_HOST_NAME.crt
 sudo update-ca-certificates
 sudo systemctl restart docker
 sleep 5
@@ -35,3 +49,4 @@ gcloud compute ssh --zone "$IC_VM_ZONE" "$IC_VM_NAME" --project "$GCP_PROJECT" -
 # SSH commands:
 # source 00_setup.sh && gcloud compute ssh --zone "$R_VM_ZONE" "$R_VM_NAME" --project "$GCP_PROJECT" --internal-ip
 # source 00_setup.sh && gcloud compute ssh --zone "$IC_VM_ZONE" "$IC_VM_NAME" --project "$GCP_PROJECT" --internal-ip
+# source 00_setup.sh && gcloud compute ssh --zone "$GH_VM_ZONE" "$GH_VM_NAME" --project "$GCP_PROJECT" --internal-ip

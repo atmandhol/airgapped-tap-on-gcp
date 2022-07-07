@@ -13,3 +13,4 @@ gcloud compute routes delete $(gcloud compute routes list | grep $PRIV_NETWORK_N
 # Remove Public IPs of the VMs
 gcloud compute instances delete-access-config $IC_VM_NAME --zone $IC_VM_ZONE
 gcloud compute instances delete-access-config $R_VM_NAME --zone $R_VM_ZONE
+gcloud compute instances delete-access-config $GH_VM_NAME --zone $GH_VM_ZONE
