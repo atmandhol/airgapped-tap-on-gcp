@@ -43,7 +43,7 @@ sleep 5
 echo "$HARBOR_ADMIN_PASSWORD" | docker login $HARBOR_HOST_NAME -u admin --password-stdin
 EOF
 chmod +x install_certs.sh
-gcloud compute scp 00_setup.sh install_certs.sh registry_server_ca.crt $HARBOR_HOST_NAME.crt registry_ca.crt $IC_VM_NAME:~/ --zone=$IC_VM_ZONE --internal-ip
+gcloud compute scp 00_setup.sh install_certs.sh registry_server_ca.crt $HARBOR_HOST_NAME.crt registry_ca.crt $GIT_HOST_NAME.crt git_ca.crt $IC_VM_NAME:~/ --zone=$IC_VM_ZONE --internal-ip
 gcloud compute ssh --zone "$IC_VM_ZONE" "$IC_VM_NAME" --project "$GCP_PROJECT" --internal-ip -- 'source 00_setup.sh && sudo sh install_certs.sh'
 
 # SSH commands:
