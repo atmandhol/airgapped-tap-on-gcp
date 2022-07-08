@@ -2,6 +2,7 @@ gcloud compute firewall-rules delete deny-egress -q
 gcloud compute firewall-rules delete allow-ssh-pub -q
 gcloud compute firewall-rules delete allow-ssh-priv -q
 gcloud compute firewall-rules delete allow-https-priv -q
+gcloud compute firewall-rules delete allow-https-dns -q
 gcloud compute firewall-rules delete allow-https-priv-egress -q
 gcloud compute networks peerings delete airgapped-peer --network=$PRIV_NETWORK_NAME
 gcloud compute networks peerings delete airgapped-peer --network=$PUB_NETWORK_NAME

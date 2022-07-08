@@ -40,6 +40,9 @@ gcloud compute firewall-rules create allow-https-priv \
 gcloud compute firewall-rules create allow-https-priv-egress \
 --network $PRIV_NETWORK_NAME --allow tcp:443 --destination-ranges 10.10.0.0/16 --direction EGRESS
 
+gcloud compute firewall-rules create allow-https-dns \
+--network $PRIV_NETWORK_NAME --allow tcp:53 --destination-ranges 0.0.0.0/0 --direction EGRESS
+
 # Peering
 gcloud compute networks peerings create airgapped-peer \
 --network=$PUB_NETWORK_NAME --peer-project $GCP_PROJECT --peer-network $PRIV_NETWORK_NAME
