@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+# Create DNS records for all the VMs
+gcloud dns --project=$GCP_PROJECT record-sets create $R_DNS --type="A" --zone=$DNS_NAME \
+--rrdatas=$(gcloud compute instances list --filter="$R_VM_NAME" --format "get(networkInterfaces[0].networkIP)") \
+--ttl="60"
+gcloud dns --project=$GCP_PROJECT record-sets create $IC_DNS --type="A" --zone=$DNS_NAME \
+--rrdatas=$(gcloud compute instances list --filter="$IC_VM_NAME" --format "get(networkInterfaces[0].networkIP)") \
+--ttl="60"
+gcloud dns --project=$GCP_PROJECT record-sets create $GH_DNS --type="A" --zone=$DNS_NAME \
+--rrdatas=$(gcloud compute instances list --filter="$GH_VM_NAME" --format "get(networkInterfaces[0].networkIP)") \
+--ttl="60"
+
 # Bootstrap Registry VM
 wget https://github.com/goharbor/harbor/releases/download/$HARBOR_VERSION/harbor-offline-installer-$HARBOR_VERSION.tgz
 mv harbor-offline-installer-$HARBOR_VERSION.tgz registry.tgz

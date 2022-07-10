@@ -1,3 +1,11 @@
+# Delete DNS Records
+gcloud dns --project=$GCP_PROJECT record-sets delete $R_DNS --type="A" --zone=$DNS_NAME
+gcloud dns --project=$GCP_PROJECT record-sets delete $GH_DNS --type="A" --zone=$DNS_NAME
+gcloud dns --project=$GCP_PROJECT record-sets delete $IC_DNS --type="A" --zone=$DNS_NAME
+
+# Delete the private DNS Zone
+gcloud dns --project=$GCP_PROJECT managed-zones delete $DNS_NAME
+
 gcloud compute firewall-rules delete deny-egress -q
 gcloud compute firewall-rules delete allow-ssh-pub -q
 gcloud compute firewall-rules delete allow-ssh-priv -q
