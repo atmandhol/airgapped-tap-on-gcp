@@ -31,7 +31,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now gitea
 
 # Create certs
-export HOST_NAME=$(hostname -I | awk '{print $1}').nip.io
+export HOST_NAME=$GH_DNS
 openssl genrsa -out ca.key 4096
 openssl req -x509 -new -nodes -sha512 -days 3650 \
  -subj "/C=CN/ST=Beijing/L=Beijing/O=example/OU=Personal/CN=$HOST_NAME" \

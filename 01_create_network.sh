@@ -53,6 +53,6 @@ gcloud compute networks peerings create airgapped-peer \
 # Create Private DNS entries
 gcloud dns --project=$GCP_PROJECT managed-zones create $DNS_NAME \
 --description="Airgapped TAP DNS private zone" \
---dns-name="$DNS_ZONE" \
+--dns-name="$DNS_ZONE." \
 --visibility="private" \
 --networks="$PUB_NETWORK_NAME","$PRIV_NETWORK_NAME"

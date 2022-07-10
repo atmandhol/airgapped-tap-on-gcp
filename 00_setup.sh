@@ -34,8 +34,7 @@ export TBS_DEPS_PACKAGE_BUNDLE_VERSION=1.6.0
 export PRIV_NETWORK_NAME=tap-airgapped-network
 export PUB_NETWORK_NAME=tap-public-network
 export DNS_NAME=tap
-# Keep the . at the end of the DNS_ZONE value
-export DNS_ZONE=tap.io.
+export DNS_ZONE=tap.io
 
 ## Generic
 export GCP_REGION=us-central1
@@ -55,8 +54,7 @@ export PUB_SUBNET_RANGE=10.10.13.0/24
 export IC_VM_NAME=airgapped-iterate-cluster
 export IC_VM_ZONE=us-central1-a
 export IC_VM_TYPE=e2-standard-16
-# Keep the . at the end of the IC_DNS value
-export IC_DNS=iterate.tap.io.
+export IC_DNS=iterate.tap.io
 
 ## Jump VM setup
 export JP_VM_NAME=airgapped-jump
@@ -68,16 +66,14 @@ export GH_VM_NAME=airgapped-git
 export GH_VM_ZONE=us-central1-a
 export GH_VM_TYPE=e2-standard-2
 export GITEA_VERSION=1.16.8
-# Keep the . at the end of the GH_DNS value
-export GH_DNS=gitea.tap.io.
+export GH_DNS=gitea.tap.io
 
 ## Harbor Registry VM setup
 export R_VM_NAME=airgapped-registry
 export R_VM_ZONE=us-central1-a
 export R_VM_TYPE=e2-standard-2
 export HARBOR_VERSION=v2.5.1
-# Keep the . at the end of the R_DNS value
-export R_DNS=registry.tap.io.
+export R_DNS=registry.tap.io
 
 
 ## Kubernetes Settings

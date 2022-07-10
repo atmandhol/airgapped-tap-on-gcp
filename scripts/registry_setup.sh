@@ -7,7 +7,7 @@ tar -xvf registry.tgz
 
 sudo service nginx stop
 
-export HOST_NAME=$(hostname -I | awk '{print $1}').nip.io
+export HOST_NAME=$R_DNS
 
 # Generate CA Cert private key
 openssl genrsa -out ca.key 4096
