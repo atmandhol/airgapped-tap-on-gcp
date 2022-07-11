@@ -13,48 +13,59 @@ export TANZU_CLI_NO_INIT=true
 
 # Add custom certs to minikube cluster
 mkdir -p $HOME/.minikube/certs
-cp registry_server_ca.crt $HOME/.minikube/certs/registry_server_ca.crt
+cp $R_DNS.crt $HOME/.minikube/certs/$R_DNS.crt
+cp $GH_DNS.crt $HOME/.minikube/certs/$GH_DNS.crt
+sudo sh install_certs.sh
 minikube start --embed-certs
 
 # Install cluster essentials
 kubectl create namespace kapp-controller
-
 kubectl delete secret harbor-creds -n kapp-controller
 kubectl delete secret kapp-controller-config -n kapp-controller
 
-kubectl -n kapp-controller create secret docker-registry harbor-creds --docker-server=$HARBOR_HOST_NAME --docker-username='admin' --docker-password=$HARBOR_ADMIN_PASSWORD
+kubectl -n kapp-controller create secret docker-registry harbor-creds --docker-server=$R_DNS --docker-username='admin' --docker-password=$HARBOR_ADMIN_PASSWORD
 
-(cd $HOME/cluster_essentials && INSTALL_BUNDLE=$HARBOR_HOST_NAME/library/cluster-essentials-bundle:$CLUSTER_ESSENTIALS_BUNDLE_VERSION \
-INSTALL_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
+cat <<EOF > kapp-controller-config.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kapp-controller-config
+  namespace: kapp-controller
+
+stringData:
+  caCerts: |
+$(awk '{print "    " $0}' $R_DNS.crt)
+EOF
+
+kubectl apply -f kapp-controller-config.yaml
+
+# kubectl create secret generic kapp-controller-config \
+#    --namespace kapp-controller \
+#    --from-file caCerts=$R_DNS.crt
+
+(cd $HOME/cluster_essentials && INSTALL_BUNDLE=$R_DNS/library/cluster-essentials-bundle:$CLUSTER_ESSENTIALS_BUNDLE_VERSION \
+INSTALL_REGISTRY_HOSTNAME=$R_DNS \
 INSTALL_REGISTRY_USERNAME=admin \
 INSTALL_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
 ./install.sh -y)
 
+# kapp delete --app kapp-controller -n tanzu-cluster-essentials -y
+
 kubectl create ns tap-install
 tanzu secret registry add tap-registry \
-    --server $HARBOR_HOST_NAME \
+    --server $R_DNS \
     --username admin \
     --password $HARBOR_ADMIN_PASSWORD \
     --namespace tap-install \
     --export-to-all-namespaces \
     --yes
 
-kubectl create secret generic kapp-controller-config \
-   --namespace kapp-controller \
-   --from-file caCerts=registry_server_ca.crt
-
-kubectl create secret generic kapp-controller-config \
-   --namespace tap-install \
-   --from-file caCerts=registry_server_ca.crt
-
-minikube start --embed-certs
-
 tanzu package repository add tanzu-tap-repository \
-    --url $HARBOR_HOST_NAME/library/tap-packages:$TAP_PACKAGE_BUNDLE_VERSION \
+    --url $R_DNS/library/tap-packages:$TAP_PACKAGE_BUNDLE_VERSION \
     --namespace tap-install
 
 tanzu package repository add tbs-full-deps-repository \
-    --url $HARBOR_HOST_NAME/library/tbs-full-deps:$TBS_DEPS_PACKAGE_BUNDLE_VERSION \
+    --url $R_DNS/library/tbs-full-deps:$TBS_DEPS_PACKAGE_BUNDLE_VERSION \
     --namespace tap-install
 
 # tanzu package repository delete tanzu-tap-repository -n tap-install -y
@@ -67,12 +78,12 @@ appliveview_connector:
 buildservice:
   # descriptor_name: full
   enable_automatic_dependency_updates: false
-  kp_default_repository: $HARBOR_HOST_NAME/library/tbs
+  kp_default_repository: $R_DNS/library/tbs
   kp_default_repository_username: admin
   kp_default_repository_password: $HARBOR_ADMIN_PASSWORD
   exclude_dependencies: true
   ca_cert_data: |
-$(awk '{print "    " $0}' registry_server_ca.crt)
+$(awk '{print "    " $0}' $R_DNS.crt)
 
 ceip_policy_disclosed: true
 cnrs:
@@ -95,9 +106,9 @@ ootb_supply_chain_basic:
     ssh_secret: ''
   registry:
     repository: library/supplychain
-    server: $HARBOR_HOST_NAME
+    server: $R_DNS
     ca_cert_data: |
-$(awk '{print "      " $0}' registry_server_ca.crt)
+$(awk '{print "      " $0}' $R_DNS.crt)
 
 
 profile: iterate
@@ -105,22 +116,20 @@ supply_chain: basic
 
 shared:
   ca_cert_data: |
-$(awk '{print "    " $0}' registry_server_ca.crt)
+$(awk '{print "    " $0}' $R_DNS.crt)
 
 EOF
 
 # minikube start --embed-certs
-sleep 10
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_PACKAGE_BUNDLE_VERSION --values-file tap-values.yaml -n tap-install --wait=false
-sleep 10
 tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v $TBS_DEPS_PACKAGE_BUNDLE_VERSION -n tap-install --wait=false
 
 # Setup Dev Namespace
-echo "$HARBOR_ADMIN_PASSWORD" | docker login $HARBOR_HOST_NAME -u admin --password-stdin
+echo "$HARBOR_ADMIN_PASSWORD" | docker login $R_DNS -u admin --password-stdin
 
-tanzu secret registry add registry-credentials --server $HARBOR_HOST_NAME --username admin --password $HARBOR_ADMIN_PASSWORD --namespace default
+tanzu secret registry add registry-credentials --server $R_DNS --username admin --password $HARBOR_ADMIN_PASSWORD --namespace default
 
-kubectl create secret generic custom-ca --from-file=caFile=registry_server_ca.crt -n default
+kubectl create secret generic custom-ca --from-file=caFile=$R_DNS.crt -n default
 
 cat <<EOF | kubectl -n default apply -f -
 apiVersion: v1

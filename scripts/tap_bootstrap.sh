@@ -27,14 +27,14 @@ then
     gsutil cp cluster-essentials-$CLUSTER_ESSENTIALS_BUNDLE_VERSION.tar gs://$GCP_STAGING_BUCKET/
 fi
 
-IMGPKG_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
+IMGPKG_REGISTRY_HOSTNAME=$R_DNS \
 IMGPKG_REGISTRY_USERNAME=admin \
 IMGPKG_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
 imgpkg copy \
     --tar cluster-essentials-$CLUSTER_ESSENTIALS_BUNDLE_VERSION.tar \
-    --to-repo $HARBOR_HOST_NAME/library/cluster-essentials-bundle \
+    --to-repo $R_DNS/library/cluster-essentials-bundle \
     --include-non-distributable-layers \
-    --registry-ca-cert-path $HARBOR_HOST_NAME.crt
+    --registry-ca-cert-path $R_DNS.crt
 
 
 ## Download TAP Packages
@@ -55,14 +55,14 @@ then
     gsutil cp tap-packages-$TAP_PACKAGE_BUNDLE_VERSION.tar gs://$GCP_STAGING_BUCKET/
 fi
 
-IMGPKG_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
+IMGPKG_REGISTRY_HOSTNAME=$R_DNS \
 IMGPKG_REGISTRY_USERNAME=admin \
 IMGPKG_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
 imgpkg copy \
     --tar tap-packages-$TAP_PACKAGE_BUNDLE_VERSION.tar \
-    --to-repo $HARBOR_HOST_NAME/library/tap-packages \
+    --to-repo $R_DNS/library/tap-packages \
     --include-non-distributable-layers \
-    --registry-ca-cert-path $HARBOR_HOST_NAME.crt
+    --registry-ca-cert-path $R_DNS.crt
 
 
 ## Download TBS Full Deps Packages
@@ -83,14 +83,14 @@ then
     gsutil cp tbs-full-deps-$TBS_DEPS_PACKAGE_BUNDLE_VERSION.tar gs://$GCP_STAGING_BUCKET/
 fi
 
-IMGPKG_REGISTRY_HOSTNAME=$HARBOR_HOST_NAME \
+IMGPKG_REGISTRY_HOSTNAME=$R_DNS \
 IMGPKG_REGISTRY_USERNAME=admin \
 IMGPKG_REGISTRY_PASSWORD=$HARBOR_ADMIN_PASSWORD \
 imgpkg copy \
     --tar tbs-full-deps-$TBS_DEPS_PACKAGE_BUNDLE_VERSION.tar \
-    --to-repo $HARBOR_HOST_NAME/library/tbs-full-deps \
+    --to-repo $R_DNS/library/tbs-full-deps \
     --include-non-distributable-layers \
-    --registry-ca-cert-path $HARBOR_HOST_NAME.crt
+    --registry-ca-cert-path $R_DNS.crt
 
 # Run TAP Install
 gcloud compute scp cli.tar cluster_essentials.tgz 00_setup.sh tap_airgapped_install.sh $IC_VM_NAME:~/ --zone=$IC_VM_ZONE --internal-ip
