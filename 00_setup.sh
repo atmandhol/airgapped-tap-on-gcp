@@ -11,7 +11,7 @@ export TANZUNET_USERNAME=adhol@vmware.com
 export TANZUNET_PASSWORD=
 
 # Manual downloads from Tanzu Network (For now)
-export CLUSTER_ESSENTIALS_TAR=tanzu-cluster-essentials-linux-amd64-1.2.0-rc.1.tgz
+export CLUSTER_ESSENTIALS_TAR=tanzu-cluster-essentials-linux-amd64-1.2.0.tgz
 export TANZU_CLI_TAR=tanzu-framework-linux-amd64.tar
 export TANZU_CLI_VERSION=v0.11.6
 
@@ -19,8 +19,8 @@ export TANZU_CLI_VERSION=v0.11.6
 export HARBOR_ADMIN_PASSWORD=Harbor12345
 
 # TAP Configuration
-export CLUSTER_ESSENTIALS_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle:1.2.0-rc.1
-export CLUSTER_ESSENTIALS_BUNDLE_VERSION=1.2.0-rc.1
+export CLUSTER_ESSENTIALS_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle:1.2.0
+export CLUSTER_ESSENTIALS_BUNDLE_VERSION=1.2.0
 export TAP_PACKAGE_BUNDLE=registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.2.0
 export TAP_PACKAGE_BUNDLE_VERSION=1.2.0
 export TBS_DEPS_PACKAGE_BUNDLE=registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:1.6.0

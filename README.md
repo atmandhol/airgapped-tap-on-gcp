@@ -58,7 +58,7 @@ This script sets a `DENY` egress rule to `0.0.0.0/0` and remove the default rout
 - Download [Tanzu CLI Linux Bundle](https://network.pivotal.io/products/tanzu-application-platform/#/releases/1124562/file_groups/8893) and [Cluster Essentials for Linux](https://network.pivotal.io/products/tanzu-cluster-essentials/#/releases/1077299) from Tanzu Network. The following files should be on your Downloads folder (if the file names are different, no worries, just update the values in the 00_setup.sh file and run `source 00_setup.sh` before running further commands):
 
     - tanzu-framework-linux-amd64.tar
-    - tanzu-cluster-essentials-linux-amd64-1.2.0-rc.1.tgz
+    - tanzu-cluster-essentials-linux-amd64-1.2.0.tgz
 
 - Copy those files to Jump Box using the following command
 
